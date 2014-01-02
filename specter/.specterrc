@@ -1,9 +1,0 @@
-[paths]
-testroot = tests
-baseline = screenshots
-diffdir  = /tmp/specter
-failviewer = open
-
-[hostnames]
-basedin_dev = http://basedin.dev
-basedin_stage = http://stage.basedin.com
