@@ -5,10 +5,32 @@ var test        = require('../includes/bootstrap.js'),
 
     // local test config
     testURI  = baseURI + '/user/login',
-    testName = 'browse_categories_nav';
+    testName = 'browse_categories_nav',
+    username = 'customer',
+    password = 'test',
+    loginFormSelector = 'form#user-login';
+
+phantom.cookiesEnabled = true;
 
 casper.start(testURI);
 
+casper.then(function logIn() {
+  this.test.assertExists(loginFormSelector, 'form is found');
+  this.fill(loginFormSelector, {
+      name: username,
+      pass: password
+  }, true);
+
+  this.evaluate(function () {
+    $(loginFormSelector).submit();
+  });
+});
+
+casper.then(function(){
+  phantomcss.screenshot('body', 'customer_account');
+});
+
+/*
 resolutions.forEach(function(resolution) {
   var x = resolution[0],
       y = resolution[1],
@@ -30,7 +52,7 @@ resolutions.forEach(function(resolution) {
 
   //#block-views-all-business-categories-block
 });
-
+*/
 casper.then(function(){
   phantomcss.compareAll();
 });
