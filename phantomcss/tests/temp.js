@@ -2,29 +2,28 @@ var test = require('../includes/bootstrap.js'), phantomcss = test.phantomcss, co
 
 
 casper.test.begin('Account and login pages', function suite(test) {
-  casper.start(casper.options.baseURI, function () {
-    config.resolutions.forEach(function (resolution) {
+  casper.start(casper.options.baseURI);
 
-      var x = resolution[0], y = resolution[1];
-      test.comment('Testing at ' + x + 'x' + y + ' resolution');
+  config.resolutions.forEach(function (resolution) {
+    var x = resolution[0], y = resolution[1];
+    test.comment('Testing at ' + x + 'x' + y + ' resolution');
 
-      casper.viewport(x, y);
+    casper.viewport(x, y);
 
-      // Log in as a customer
-      casper.goto('login', function () {
-        phantomcss.screenshot('body', 'login_' + x + '_' + y);
-        this.login(config.customerUser, config.customerPass);
-        phantomcss.screenshot('body', 'customer_account_' + x + '_' + y);
-        this.logout();
-      });
+    // Login page
+    casper.goto('login');
+    phantomcss.screenshot('body', 'login_' + x + '_' + y);
 
-      // Log in as a business
-      casper.goto('login', function () {
-        this.login(config.businessUser, config.businessPass);
-        phantomcss.screenshot('body', 'business_account_' + x + '_' + y);
-        this.logout();
-      });
-    });
+    // Customer account page
+    casper.login(config.customerUser, config.customerPass);
+    phantomcss.screenshot('body', 'customer_account_' + x + '_' + y);
+    casper.logout();
+
+    // Business account page
+    casper.goto('login');
+    casper.login(config.businessUser, config.businessPass);
+    phantomcss.screenshot('body', 'business_account_' + x + '_' + y);
+    casper.logout();
   });
 
   casper.then(function() {
