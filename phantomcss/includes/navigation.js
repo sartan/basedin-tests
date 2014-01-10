@@ -13,7 +13,7 @@ var routes = {
 
 casper.goto = function(route, callback) {
   if (route in routes) {
-    console.log('Going from ' + this.getCurrentUrl() + ' to ' + routes[route]);
+    //console.log('Going from ' + this.getCurrentUrl() + ' to ' + routes[route]);
     this.thenOpen(this.options.baseURI + routes[route], callback);
   }
   return this;
