@@ -1,7 +1,8 @@
-var test = require('../includes/bootstrap.js'), phantomcss = test.phantomcss, config = test.config;
+var testsuite = require('../includes/bootstrap.js'), phantomcss = testsuite.phantomcss, config = testsuite.config;
 
 casper.test.begin('CSS regression tests', function suite(test) {
   casper.start(casper.options.baseURI);
+
     // Home
     casper.goto('home');
     captureMultiRez('body', 'home');
@@ -46,15 +47,21 @@ casper.test.begin('CSS regression tests', function suite(test) {
   });
 
   casper.run(function () {
-    test.done();
+    this.test.done();
     phantomcss.getExitStatus();
   });
 });
 
  function captureMultiRez(selector, imgPrefix) {
-  config.resolutions.forEach(function (resolution) {
-    var x = resolution[0], y = resolution[1], rezSuffix = x + '_' + y;
-    casper.viewport(x, y);
-    phantomcss.screenshot(selector, imgPrefix + '_' + rezSuffix);
-  });
+   casper.then(function() {
+     config.resolutions.forEach(function (resolution) {
+       var x = resolution[0], y = resolution[1], rezSuffix = x + '_' + y;
+       casper.then(function() {
+         casper.test.comment('Capturing "' + imgPrefix.replace('_', ' ') + '" @ ' + x + 'x' + y);
+         casper.viewport(x, y, function() {
+           phantomcss.screenshot(selector, imgPrefix + '_' + rezSuffix);
+         });
+       });
+     });
+   });
 }
