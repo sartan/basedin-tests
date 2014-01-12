@@ -53,8 +53,8 @@ casper.test.begin('CSS regression tests', function suite(test) {
 
  function captureMultiRez(selector, imgPrefix) {
   config.resolutions.forEach(function (resolution) {
-    var x = resolution[0], y = resolution[1], rez_suffix = x + '_' + y;
+    var x = resolution[0], y = resolution[1], rezSuffix = x + '_' + y;
     casper.viewport(x, y);
-    phantomcss.screenshot(selector, imgPrefix + '_' + rez_suffix);
+    phantomcss.screenshot(selector, imgPrefix + '_' + rezSuffix);
   });
 }
