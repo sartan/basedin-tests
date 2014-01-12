@@ -1,53 +1,45 @@
 var test = require('../includes/bootstrap.js'), phantomcss = test.phantomcss, config = test.config;
 
-
 casper.test.begin('CSS regression tests', function suite(test) {
   casper.start(casper.options.baseURI);
-
-  config.resolutions.forEach(function (resolution) {
-    var x = resolution[0], y = resolution[1], rez_suffix = x + '_' + y;
-    casper.viewport(x, y);
-
     // Home
     casper.goto('home');
-    phantomcss.screenshot('body', 'home_' + rez_suffix);
+    captureMultiRez('body', 'home');
 
     // Login
     casper.goto('login');
-    phantomcss.screenshot('body', 'login_' + rez_suffix);
+    captureMultiRez('body', 'login');
 
     // Customer account
     casper.login(config.customerUser, config.customerPass);
-    phantomcss.screenshot('body', 'customer_account_' + rez_suffix);
+    captureMultiRez('body', 'customer_account');
     casper.logout();
 
     // Business account
     casper.goto('login');
     casper.login(config.businessUser, config.businessPass);
-    phantomcss.screenshot('body', 'business_account_' + rez_suffix);
+    captureMultiRez('body', 'business_account');
     casper.logout();
 
     // Customer registration
     casper.goto('registerCustomer');
-    phantomcss.screenshot('body', 'register_customer_' + rez_suffix);
+    captureMultiRez('body', 'register_customer');
 
     // Business registration
     casper.goto('registerBusiness');
-    phantomcss.screenshot('body', 'register_business_' + rez_suffix);
+    captureMultiRez('body', 'register_business');
 
     // Plan selection
     casper.goto('planSelection');
-    phantomcss.screenshot('body', 'plan_selection_' + rez_suffix);
+    captureMultiRez('body', 'plan_selection');
 
     // Business selection
     casper.goto('businessSelect');
-    phantomcss.screenshot('body', 'business_select_' + rez_suffix);
+    captureMultiRez('body', 'business_select');
 
     // Category page
     casper.goto('categoryPage');
-    phantomcss.screenshot('body', 'category_page_' + rez_suffix);
-
-  });
+    captureMultiRez('body', 'category_page');
 
   casper.then(function() {
     phantomcss.compareAll();
@@ -58,3 +50,11 @@ casper.test.begin('CSS regression tests', function suite(test) {
     phantomcss.getExitStatus();
   });
 });
+
+ function captureMultiRez(selector, imgPrefix) {
+  config.resolutions.forEach(function (resolution) {
+    var x = resolution[0], y = resolution[1], rez_suffix = x + '_' + y;
+    casper.viewport(x, y);
+    phantomcss.screenshot(selector, imgPrefix + '_' + rez_suffix);
+  });
+}
