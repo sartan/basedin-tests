@@ -20,11 +20,11 @@ casper.goto = function(route, callback) {
 }
 
 casper.login = function(username, password) {
-  var form = 'form#user-login';
-  this.waitForSelector(form, function() {
-    this.fill(form, {name: username, pass: password}, true);
+  var selector = 'form#user-login';
+  this.waitForSelector(selector, function() {
+    this.fill(selector, {name: username, pass: password}, true);
     this.evaluate(function () {
-      $(form).submit();
+      $(selector).submit();
     });
   });
 
@@ -33,4 +33,11 @@ casper.login = function(username, password) {
 
 casper.logout = function(callback) {
   this.goto('logout', callback);
+}
+
+casper.expandNavCategories = function() {
+  var selector = '#block-views-all-business-categories-block';
+  casper.click('a[data-target="' + selector + '"]');
+  casper.waitForSelector(selector);
+  return this;
 }
