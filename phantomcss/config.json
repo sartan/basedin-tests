@@ -13,5 +13,17 @@
     [768, 1024],
     [1024, 768],
     [1280, 1024]
-  ]
+  ],
+  "routes" : {
+    "home"   : "/",
+    "login"  : "/user/login",
+    "logout" : "/user/logout",
+    "registerCustomer" : "/register/customer",
+    "registerBusiness" : "/register/business",
+    "accountCustomer"  : "/account/customer",
+    "accountBusiness"  : "/account/business",
+    "planSelection"    : "/content/plan-selection",
+    "businessSelect"   : "/business-category/car-rental",
+    "categoryPage"     : "/category/automotive-transportation"
+    }
 }

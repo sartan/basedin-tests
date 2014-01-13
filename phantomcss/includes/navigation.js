@@ -1,43 +1,45 @@
-var routes = {
-  home   : '/',
-  login  : '/user/login',
-  logout : '/user/logout',
-  registerCustomer : '/register/customer',
-  registerBusiness : '/register/business',
-  accountCustomer  : '/account/customer',
-  accountBusiness  : '/account/business',
-  planSelection    : '/content/plan-selection',
-  businessSelect   : '/business-category/car-rental',
-  categoryPage     : '/category/automotive-transportation'
-};
+var routes = {};
 
-casper.goto = function(route, callback) {
-  if (route in routes) {
-    //console.log('Going from ' + this.getCurrentUrl() + ' to ' + routes[route]);
-    this.thenOpen(this.options.baseURI + routes[route], callback);
-  }
+exports.init = function (routes) {
+  this.routes = routes;
   return this;
 }
 
-casper.login = function(username, password) {
-  var selector = 'form#user-login';
-  this.waitForSelector(selector, function() {
-    this.fill(selector, {name: username, pass: password}, true);
-    this.evaluate(function () {
-      $(selector).submit();
+exports.goto = function(route, callback) {
+  if (route in this.routes) {
+    var routes = this.routes;
+    casper.then(function() {
+      console.log('Navigating from ' + casper.getCurrentUrl().replace(casper.options.baseURI, '') + ' to ' + routes[route]);
+      casper.thenOpen(casper.options.baseURI + routes[route], callback);
+    });
+  }
+}
+
+exports.login = function(username, password) {
+  casper.then(function() {
+    console.log('Logging in...');
+    var selector = 'form#user-login';
+    casper.waitForSelector(selector, function() {
+      this.fill(selector, {name: username, pass: password}, true);
+      this.evaluate(function () {
+        $(selector).submit();
+      });
     });
   });
-
-  return this;
 }
 
-casper.logout = function(callback) {
-  this.goto('logout', callback);
+exports.logout = function(callback) {
+  var nav = this;
+  casper.then(function() {
+    console.log('Logging out...');
+    nav.goto('logout', callback);
+  });
 }
 
-casper.expandNavCategories = function() {
-  var selector = '#block-views-all-business-categories-block';
-  casper.click('a[data-target="' + selector + '"]');
-  casper.waitForSelector(selector);
-  return this;
+exports.expandNavCategories = function() {
+  casper.then(function() {
+    var selector = '#block-views-all-business-categories-block';
+    casper.click('a[data-target="' + selector + '"]');
+    casper.waitForSelector(selector);
+  });
 }

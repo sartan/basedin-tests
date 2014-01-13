@@ -7,8 +7,9 @@ phantomcss.init({
   libraryRoot           : config.libraryRoot
 });
 
-require('./navigation.js');
+casper.options.baseURI  = config.baseURI;
 
-casper.options.baseURI = config.baseURI;
-exports.config = config;
+exports.config     = config;
 exports.phantomcss = phantomcss;
+exports.navigation = require('./navigation.js').init(config.routes);
+exports.utils      = require('./utils.js').init(config, phantomcss);
